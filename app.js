@@ -1,6 +1,25 @@
 const $ = (s, root = document) => root.querySelector(s);
 const $$ = (s, root = document) => [...root.querySelectorAll(s)];
 
+// Keep the durable Render build independently previewable while promoting internal
+// navigation to clean Squarespace routes when the build is embedded there.
+if (window.self !== window.top) {
+  const parentOrigin = new URL(document.referrer || location.href).origin;
+  const routeMap = {
+    'garden-district.html': '/garden-district',
+    'pitchers-point-beach-house.html': '/pitchers-point-beach-house',
+    'capital-heights-hideaway.html': '/capital-heights-hideaway',
+    'index.html': '/lucky-stone-redesign-private-staging'
+  };
+  $$('a[href]').forEach(link => {
+    const url = new URL(link.getAttribute('href'), location.href);
+    const file = url.pathname.split('/').pop();
+    if (!routeMap[file]) return;
+    link.href = `${parentOrigin}${routeMap[file]}${url.hash}`;
+    link.target = '_top';
+  });
+}
+
 $('[data-year]').textContent = new Date().getFullYear();
 
 const menuButton = $('[data-menu-button]');
