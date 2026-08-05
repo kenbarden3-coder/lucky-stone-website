@@ -56,29 +56,43 @@ moods.forEach(button => button.addEventListener('click', () => {
   });
 }));
 
-const bookingBase = 'https://luckystonevacationrentals.holidayfuture.com';
 const today = new Date().toISOString().slice(0, 10);
 $$('input[type="date"]').forEach(input => { input.min = today; });
 
-function bookingUrl(form, listingId = '') {
+function inquiryUrl(form, listingId = '') {
   const data = new FormData(form);
   const start = data.get('checkin');
   const end = data.get('checkout');
   const guestValue = String(data.get('guests') || '1');
   const numberOfGuests = guestValue.match(/\d+/)?.[0] || '1';
-  const params = new URLSearchParams();
   if (start && end) {
     if (end <= start) throw new Error('Check-out must be after check-in.');
-    params.set('start', start);
-    params.set('end', end);
   }
-  params.set('numberOfGuests', numberOfGuests);
   const place = data.get('place');
-  if (!listingId && place && place !== 'all') {
-    params.set('city', place === 'baton-rouge' ? 'Baton Rouge' : 'Long Beach');
-  }
-  const path = listingId ? `/listings/${listingId}` : '/search';
-  return `${bookingBase}${path}?${params.toString()}`;
+  const listingNames = {
+    '113394': 'The Garden District House',
+    '113397': 'Pitchers Point Beach House',
+    '290981': 'The Capital Heights Hideaway'
+  };
+  const requestedHome = listingNames[listingId]
+    || (place === 'baton-rouge' ? 'A Baton Rouge home'
+      : place === 'long-beach' ? 'Pitchers Point Beach House'
+      : 'Any Lucky Stone home');
+  const subject = `Availability request: ${requestedHome}`;
+  const body = [
+    'Hi Lucky Stone,',
+    '',
+    `I would like to check availability for ${requestedHome}.`,
+    `Check-in: ${start || 'Flexible'}`,
+    `Check-out: ${end || 'Flexible'}`,
+    `Guests: ${numberOfGuests}`,
+    '',
+    'Please send me availability and a direct quote.',
+    '',
+    'Name:',
+    'Phone:'
+  ].join('\n');
+  return `mailto:luckystonelife@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
 
 $$('[data-stay-form], [data-property-booking-form]').forEach(form => {
@@ -88,7 +102,7 @@ $$('[data-stay-form], [data-property-booking-form]').forEach(form => {
     try {
       if (error) error.textContent = '';
       const listingId = form.dataset.listingId || '';
-      window.open(bookingUrl(form, listingId), '_blank', 'noopener');
+      window.location.href = inquiryUrl(form, listingId);
     } catch (err) {
       if (error) error.textContent = err.message;
     }
