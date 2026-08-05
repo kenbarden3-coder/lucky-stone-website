@@ -9,7 +9,7 @@ if (window.self !== window.top) {
     'garden-district.html': '/garden-district',
     'pitchers-point-beach-house.html': '/pitchers-point-beach-house',
     'capital-heights-hideaway.html': '/capital-heights-hideaway',
-    'index.html': '/lucky-stone-redesign-private-staging'
+    'index.html': '/'
   };
   $$('a[href]').forEach(link => {
     const url = new URL(link.getAttribute('href'), location.href);
@@ -68,16 +68,13 @@ function inquiryUrl(form, listingId = '') {
   if (start && end) {
     if (end <= start) throw new Error('Check-out must be after check-in.');
   }
-  const place = data.get('place');
+  const home = String(data.get('home') || '');
   const listingNames = {
     '113394': 'The Garden District House',
     '113397': 'Pitchers Point Beach House',
     '290981': 'The Capital Heights Hideaway'
   };
-  const requestedHome = listingNames[listingId]
-    || (place === 'baton-rouge' ? 'A Baton Rouge home'
-      : place === 'long-beach' ? 'Pitchers Point Beach House'
-      : 'Any Lucky Stone home');
+  const requestedHome = listingNames[listingId || home] || 'Any Lucky Stone home';
   const subject = `Availability request: ${requestedHome}`;
   const body = [
     'Hi Lucky Stone,',
@@ -108,6 +105,11 @@ $$('[data-stay-form], [data-property-booking-form]').forEach(form => {
     }
   });
 });
+
+$$('[data-select-home]').forEach(link => link.addEventListener('click', () => {
+  const home = $(`input[name="home"][value="${link.dataset.selectHome}"]`);
+  if (home) home.checked = true;
+}));
 
 const galleries = {
   garden: {kicker:'Baton Rouge · Garden District', title:'The Garden District House', count:10},

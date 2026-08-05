@@ -80,6 +80,8 @@ def page(p):
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="{escape(p['description'])}">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://www.luckystonevacationrentals.com/{p['file'].removesuffix('.html')}">
   <meta name="theme-color" content="#0b2b40">
   <title>{escape(p['seo'])}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -89,20 +91,20 @@ def page(p):
 </head>
 <body class="property-page">
   <a class="skip-link" href="#main">Skip to content</a>
-  <div class="announcement"><span>Book direct for local support & our best available rate</span><span aria-hidden="true">✦</span><span>Secure checkout powered by Hostaway</span></div>
+  <div class="announcement"><span>Book direct for local support & our best available rate</span><span aria-hidden="true">✦</span><span>Requests handled by the Lucky Stone family</span></div>
   <header class="site-header property-header" data-header>
     <a class="brand" href="index.html" aria-label="Lucky Stone Vacation Rentals home"><span class="brand-mark" aria-hidden="true">L</span><span><strong>Lucky Stone</strong><small>Vacation Rentals</small></span></a>
-    <nav class="desktop-nav" aria-label="Main navigation"><a href="index.html#stays">Our stays</a><a href="#details">Details</a><a href="#gallery">Photos</a><a href="index.html#our-story">Our story</a></nav>
-    <a class="button button-small button-sun" href="#book">Check dates <span>↓</span></a>
+    <nav class="desktop-nav" aria-label="Main navigation"><a href="index.html#book-a-stay">Book a stay</a><a href="#details">Details</a><a href="#gallery">Photos</a><a href="index.html#our-story">About us</a></nav>
+    <a class="button button-small button-sun" href="#book">Book this home</a>
     <button class="menu-button" type="button" aria-label="Open menu" aria-expanded="false" data-menu-button><span></span><span></span></button>
   </header>
-  <div class="mobile-menu" data-mobile-menu hidden><a href="index.html#stays">Our stays</a><a href="#details">Details</a><a href="#gallery">Photos</a><a href="index.html#our-story">Our story</a><a class="button button-sun" href="#book">Check dates</a></div>
+  <div class="mobile-menu" data-mobile-menu hidden><a href="index.html#book-a-stay">Book a stay</a><a href="#details">Details</a><a href="#gallery">Photos</a><a href="index.html#our-story">About us</a><a class="button button-sun" href="#book">Book this home</a></div>
 
   <main id="main">
     <section class="property-hero" id="top">
       <img src="assets/{p['key']}/{p['key']}-01.jpg" alt="{escape(p['title'])}">
       <div class="property-hero-shade"></div>
-      <div class="property-hero-copy reveal"><p class="eyebrow">{escape(p['location'])}</p><h1>{escape(p['title'])}</h1><p>{escape(p['lede'])}</p><div class="property-hero-actions"><a class="button button-coral" href="#book">See live availability</a><a class="text-button" href="#gallery">View photos ↓</a></div></div>
+      <div class="property-hero-copy reveal"><p class="eyebrow">{escape(p['location'])}</p><h1>{escape(p['title'])}</h1><p>{escape(p['lede'])}</p><div class="property-hero-actions"><a class="button button-coral" href="#book">Book this home</a><a class="text-button" href="#gallery">View photos</a></div></div>
       <div class="image-badge property-hero-badge">{escape(p['badge'])}</div>
     </section>
 
@@ -112,14 +114,14 @@ def page(p):
     </section>
 
     <section class="property-booking" id="book">
-      <div class="property-booking-copy"><p class="eyebrow">Ready when you are</p><h2>Check this home's live dates.</h2><p>Your availability, quote, secure payment, confirmation, and automated stay messages continue in Lucky Stone's Hostaway booking system.</p></div>
+      <div class="property-booking-copy"><p class="eyebrow">Book this home</p><h2>Choose your dates.</h2><p>Send your dates and group size directly to the Lucky Stone family. We will personally confirm availability and provide a direct quote.</p></div>
       <form class="property-booking-form" data-property-booking-form data-listing-id="{p['listing']}">
         <label><span>Check in</span><input type="date" name="checkin" required></label>
         <label><span>Check out</span><input type="date" name="checkout" required></label>
         <label><span>Guests</span><select name="guests">{''.join(f'<option>{i} guest{"s" if i != 1 else ""}</option>' for i in range(1, int(p['stats'][0][0]) + 1))}</select></label>
-        <button class="button button-sun" type="submit">View live price & availability ↗</button>
+        <button class="button button-sun" type="submit">Send booking request</button>
         <p class="booking-error" data-booking-error aria-live="polite"></p>
-        <small>No charge is made on this page.</small>
+        <small>Your request opens in email. No charge is made.</small>
       </form>
     </section>
 
@@ -128,15 +130,15 @@ def page(p):
       <div class="nearby-card"><p class="eyebrow">Close to what matters</p><h3>Explore the neighborhood.</h3><ul>{list_markup(p['nearby'])}</ul><p>Exact address and arrival instructions are shared securely with confirmed guests.</p></div>
     </section>
 
-    <section class="property-gallery section-pad" id="gallery"><div class="section-heading"><div><p class="eyebrow dark">A look inside</p><h2>Photo highlights.</h2></div><p>Professional property photography. The full gallery and current listing details are also available in the secure booking portal.</p></div><div class="property-photo-grid">{photo_markup(p)}</div></section>
+    <section class="property-gallery section-pad" id="gallery"><div class="section-heading"><div><p class="eyebrow dark">A look inside</p><h2>Photo highlights.</h2></div><p>Browse the home, then choose your dates above when you are ready.</p></div><div class="property-photo-grid">{photo_markup(p)}</div></section>
 
     <section class="property-review"><blockquote><div class="stars">★★★★★</div><p>“{escape(p['quote'])}”</p><footer>{escape(p['reviewer'])}</footer></blockquote></section>
 
-    <section class="final-cta"><p class="eyebrow">Live availability · Secure checkout · Direct local support</p><h2>Put this Lucky Stone stay<br>on your calendar.</h2><a class="button button-coral" href="#book">Check dates and pricing ↑</a><small>Booking and payment are securely powered by Hostaway.</small></section>
+    <section class="final-cta"><p class="eyebrow">Direct request · Personal confirmation · Local support</p><h2>Put this Lucky Stone stay<br>on your calendar.</h2><a class="button button-coral" href="#book">Book this home</a><small>Your request goes directly to the Lucky Stone family.</small></section>
   </main>
 
-  <footer class="footer"><a class="brand footer-brand" href="index.html"><span class="brand-mark">L</span><span><strong>Lucky Stone</strong><small>Vacation Rentals</small></span></a><div><strong>Explore</strong><a href="index.html#stays">Our stays</a><a href="index.html#our-story">Our story</a><a href="index.html#guide">Local guide</a></div><div><strong>Stay in touch</strong><a href="https://instagram.com/luckystonelife/" target="_blank" rel="noopener">Instagram ↗</a><a href="mailto:luckystonelife@gmail.com">luckystonelife@gmail.com</a></div><div><strong>Book safely</strong><a href="https://luckystonevacationrentals.holidayfuture.com/listings/{p['listing']}" target="_blank" rel="noopener">Secure property listing ↗</a><span>Availability powered by Hostaway</span></div><p class="copyright">© <span data-year></span> Lucky Stone Vacation Rentals. Made with a little luck in Louisiana.</p></footer>
-  <script src="app.js"></script>
+  <footer class="footer"><a class="brand footer-brand" href="index.html"><span class="brand-mark">L</span><span><strong>Lucky Stone</strong><small>Vacation Rentals</small></span></a><div><strong>Explore</strong><a href="index.html#book-a-stay">Book a stay</a><a href="#details">Home details</a><a href="#gallery">Photos</a></div><div><strong>Stay in touch</strong><a href="https://instagram.com/luckystonelife/" target="_blank" rel="noopener">Instagram ↗</a><a href="mailto:luckystonelife@gmail.com">luckystonelife@gmail.com</a></div><div><strong>Book directly</strong><a href="#book">Book this home</a><span>Personal help from our family</span></div><p class="copyright">© <span data-year></span> Lucky Stone Vacation Rentals. Made with a little luck in Louisiana.</p></footer>
+  <script src="app.js?v=simple-booking-1"></script>
 </body>
 </html>
 '''
